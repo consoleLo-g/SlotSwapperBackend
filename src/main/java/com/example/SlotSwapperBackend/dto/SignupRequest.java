@@ -1,5 +1,10 @@
 package com.example.SlotSwapperBackend.dto;
 
-public class SignupRequest {
+import lombok.Data;
 
+@Data
+public class SignupRequest {
+    private String name;
+    private String email;
+    private String password;
 }
