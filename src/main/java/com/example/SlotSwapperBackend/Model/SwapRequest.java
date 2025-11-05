@@ -9,38 +9,19 @@ public class SwapRequest {
     @Id
     private String id;
 
-    private String mySlotId; // Slot of the requesting user
-    private String theirSlotId; // Slot they want from other user
+    private String requesterId;
+    private String eventId;
+    private String requestedSlot;
+    private String offeredSlot;
+    private String status;
 
-    private String requesterId; // user A
-    private String receiverId; // user B
-
-    private String status; // PENDING, ACCEPTED, REJECTED
-
-    // --- GETTERS & SETTERS ---
-
+    // ✅ Getters & Setters
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getMySlotId() {
-        return mySlotId;
-    }
-
-    public void setMySlotId(String mySlotId) {
-        this.mySlotId = mySlotId;
-    }
-
-    public String getTheirSlotId() {
-        return theirSlotId;
-    }
-
-    public void setTheirSlotId(String theirSlotId) {
-        this.theirSlotId = theirSlotId;
     }
 
     public String getRequesterId() {
@@ -51,12 +32,28 @@ public class SwapRequest {
         this.requesterId = requesterId;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    public String getEventId() {
+        return eventId;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getRequestedSlot() {
+        return requestedSlot;
+    }
+
+    public void setRequestedSlot(String requestedSlot) {
+        this.requestedSlot = requestedSlot;
+    }
+
+    public String getOfferedSlot() {
+        return offeredSlot;
+    }
+
+    public void setOfferedSlot(String offeredSlot) {
+        this.offeredSlot = offeredSlot;
     }
 
     public String getStatus() {

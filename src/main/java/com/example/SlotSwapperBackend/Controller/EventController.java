@@ -15,13 +15,29 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    // ✅ Create event using parameters
     @PostMapping("/create")
-    public Event createEvent(@RequestBody Event event) {
+    public Event createEvent(
+            @RequestParam String userId,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String date,
+            @RequestParam String startTime,
+            @RequestParam String endTime) {
+        Event event = new Event();
+        event.setUserId(userId);
+        event.setTitle(title);
+        event.setDescription(description);
+        event.setDate(date);
+        event.setStartTime(startTime);
+        event.setEndTime(endTime);
+
         return eventService.createEvent(event);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Event> getUserEvents(@PathVariable String userId) {
+    // ✅ Get events of a user
+    @GetMapping("/user")
+    public List<Event> getUserEvents(@RequestParam String userId) {
         return eventService.getEventsByUser(userId);
     }
 
@@ -30,8 +46,9 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable String id) {
+    // ✅ Delete event by ID
+    @DeleteMapping
+    public String deleteEvent(@RequestParam String id) {
         eventService.deleteEvent(id);
         return "Event deleted";
     }

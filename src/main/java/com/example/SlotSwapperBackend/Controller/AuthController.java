@@ -24,21 +24,31 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    // ✅ Register using params
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String password) {
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+
         User newUser = userService.registerUser(user);
         return ResponseEntity.ok(newUser);
     }
 
+    // ✅ Login using params
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+    public ResponseEntity<?> login(
+            @RequestParam String email,
+            @RequestParam String password) {
 
         Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(email, password));
 
-        String token = jwtUtil.generateToken(loginRequest.getEmail());
+        String token = jwtUtil.generateToken(email);
 
         return ResponseEntity.ok(token);
     }
