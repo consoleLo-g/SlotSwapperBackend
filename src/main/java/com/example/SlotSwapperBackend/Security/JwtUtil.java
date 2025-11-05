@@ -39,15 +39,27 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean validateToken(String token) {
+    // ✅ Updated: validate token and optionally check username
+    public boolean validateToken(String token, org.springframework.security.core.userdetails.UserDetails userDetails) {
         try {
-            Jwts.parserBuilder()
+            String username = extractUsername(token);
+            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private boolean isTokenExpired(String token) {
+        try {
+            Date expiration = Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
-                    .parseClaimsJws(token);
-            return true;
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration();
+            return expiration.before(new Date());
         } catch (Exception e) {
-            return false;
+            return true;
         }
     }
 }
