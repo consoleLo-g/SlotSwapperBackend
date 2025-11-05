@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.SlotSwapperBackend.Model.User;
 import com.example.SlotSwapperBackend.Service.UserService;
 import com.example.SlotSwapperBackend.Security.JwtUtil;
+import com.example.SlotSwapperBackend.dto.LoginRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,7 +25,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // ✅ Register using params
+    // Register using params (unchanged)
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @RequestParam String name,
@@ -39,19 +40,16 @@ public class AuthController {
         return ResponseEntity.ok(newUser);
     }
 
-    // ✅ Login using params
+    // Login using JSON body
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestParam String email,
-            @RequestParam String password) {
-
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            // This will use your CustomUserDetailsService + PasswordEncoder
+            // Authenticate using email and password
             Authentication auth = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password));
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
             // Generate JWT
-            String token = jwtUtil.generateToken(email);
+            String token = jwtUtil.generateToken(request.getEmail());
 
             return ResponseEntity.ok(token);
 
