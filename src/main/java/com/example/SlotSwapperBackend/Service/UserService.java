@@ -1,6 +1,6 @@
 package com.example.SlotSwapperBackend.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.SlotSwapperBackend.Model.User;
@@ -11,8 +11,14 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    // ✅ Constructor injection
+    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public User registerUser(User user) {
         // Check if email already exists
@@ -20,6 +26,9 @@ public class UserService {
         if (existing.isPresent()) {
             throw new RuntimeException("User already exists with email: " + user.getEmail());
         }
+
+        // ✅ Encode password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepo.save(user);
     }

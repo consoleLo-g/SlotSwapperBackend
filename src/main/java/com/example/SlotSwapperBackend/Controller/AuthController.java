@@ -45,11 +45,18 @@ public class AuthController {
             @RequestParam String email,
             @RequestParam String password) {
 
-        Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+        try {
+            // This will use your CustomUserDetailsService + PasswordEncoder
+            Authentication auth = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password));
 
-        String token = jwtUtil.generateToken(email);
+            // Generate JWT
+            String token = jwtUtil.generateToken(email);
 
-        return ResponseEntity.ok(token);
+            return ResponseEntity.ok(token);
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(403).body("Invalid email or password");
+        }
     }
 }

@@ -9,15 +9,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity // ✅ replaces old @EnableGlobalMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors() // ✅ enable CORS (will use the CorsFilter bean from CorsConfig)
+                .and()
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/auth/register",
+                                "/auth/login",
+                                "/users/login",
+                                "/users",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/auth/**")
@@ -27,7 +33,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ Fixes your AuthController error
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

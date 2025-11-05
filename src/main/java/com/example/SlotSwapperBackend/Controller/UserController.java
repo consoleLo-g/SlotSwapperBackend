@@ -13,19 +13,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ✅ Register a new user using URL parameters
-    @PostMapping("/register")
-    public User registerUser(
-            @RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String password) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
+    // // ✅ Register a new user using URL parameters
+    // @PostMapping("/register")
+    // public User registerUser(
+    // @RequestParam String name,
+    // @RequestParam String email,
+    // @RequestParam String password) {
+    // User user = new User();
+    // user.setName(name);
+    // user.setEmail(email);
+    // user.setPassword(password);
 
-        return userService.registerUser(user);
-    }
+    // return userService.registerUser(user);
+    // }
 
     // ✅ Get user by email
     @GetMapping
