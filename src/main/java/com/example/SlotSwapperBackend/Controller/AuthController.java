@@ -64,4 +64,14 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(403).body("Unauthorized");
+        }
+        // Fetch the user based on the email (username) extracted by JwtFilter
+        User user = userService.getUserByEmail(auth.getName());
+        return ResponseEntity.ok(user);
+    }
+
 }
