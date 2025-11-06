@@ -33,6 +33,11 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable String id) {
+        return userService.getUserById(id);
+    }
+
     // ✅ Update user using params
     @PutMapping("/update")
     public User updateUser(
