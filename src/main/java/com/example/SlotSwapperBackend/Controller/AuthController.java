@@ -44,17 +44,24 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            // Authenticate using email and password
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-            // Generate JWT
+            User user = userService.getUserByEmail(request.getEmail());
+
             String token = jwtUtil.generateToken(request.getEmail());
 
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(
+                    new java.util.HashMap<String, Object>() {
+                        {
+                            put("token", token);
+                            put("userId", user.getId());
+                        }
+                    });
 
         } catch (Exception ex) {
             return ResponseEntity.status(403).body("Invalid email or password");
         }
     }
+
 }
