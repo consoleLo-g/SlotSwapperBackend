@@ -9,12 +9,16 @@ public class Event {
     @Id
     private String id;
 
-    private String userId; // ✅ REQUIRED for findByUserId()
+    private String userId;
     private String title;
     private String description;
-    private String date; // Format: YYYY-MM-DD
-    private String startTime; // Format: HH:mm
-    private String endTime; // Format: HH:mm
+    private String date;
+    private String startTime;
+    private String endTime;
+
+    // ✅ Added fields required by SwapService
+    private String status; // BUSY, SWAPPABLE, SWAP_PENDING
+    private Boolean swappable; // true / false
 
     public Event() {
     }
@@ -28,6 +32,10 @@ public class Event {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+
+        // ✅ Defaults (optional)
+        this.status = "BUSY";
+        this.swappable = false;
     }
 
     // ---------- Getters & Setters ----------
@@ -86,5 +94,23 @@ public class Event {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    // ✅ Added: status
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // ✅ Added: swappable
+    public Boolean getSwappable() {
+        return swappable;
+    }
+
+    public void setSwappable(Boolean swappable) {
+        this.swappable = swappable;
     }
 }

@@ -15,38 +15,39 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    // ✅ Create event using parameters
+    // ✅ Create event (JSON body)
     @PostMapping("/create")
-    public Event createEvent(
-            @RequestParam String userId,
-            @RequestParam String title,
-            @RequestParam String description,
-            @RequestParam String date,
-            @RequestParam String startTime,
-            @RequestParam String endTime) {
-        Event event = new Event();
-        event.setUserId(userId);
-        event.setTitle(title);
-        event.setDescription(description);
-        event.setDate(date);
-        event.setStartTime(startTime);
-        event.setEndTime(endTime);
-
+    public Event createEvent(@RequestBody Event event) {
         return eventService.createEvent(event);
     }
 
-    // ✅ Get events of a user
+    // ✅ Get all events for logged user
     @GetMapping("/user")
     public List<Event> getUserEvents(@RequestParam String userId) {
         return eventService.getEventsByUser(userId);
     }
 
+    // ✅ Get all events
     @GetMapping("/all")
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
 
-    // ✅ Delete event by ID
+    // ✅ Make event swappable
+    @PutMapping("/{id}/make-swappable")
+    public Event makeSwappable(@PathVariable String id) {
+        Event event = eventService.getEventById(id);
+        event.setSwappable(true);
+        return eventService.updateEvent(event);
+    }
+
+    // ✅ Update event
+    @PutMapping("/{id}")
+    public Event updateEvent(@PathVariable String id, @RequestBody Event updatedEvent) {
+        return eventService.updateEventById(id, updatedEvent);
+    }
+
+    // ✅ Delete event
     @DeleteMapping
     public String deleteEvent(@RequestParam String id) {
         eventService.deleteEvent(id);
