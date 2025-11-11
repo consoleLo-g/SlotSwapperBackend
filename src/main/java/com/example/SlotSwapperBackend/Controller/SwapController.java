@@ -1,6 +1,7 @@
 package com.example.SlotSwapperBackend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.SlotSwapperBackend.Model.SwapRequest;
@@ -37,11 +38,13 @@ public class SwapController {
         return swapService.getAllSwaps();
     }
 
-    // ✅ Update swap status using param
     @PutMapping("/{id}/status")
-    public SwapRequest updateSwap(
+    public ResponseEntity<?> updateSwapStatus(
             @PathVariable String id,
             @RequestParam String status) {
-        return swapService.updateSwapStatus(id, status);
+
+        SwapRequest req = swapService.updateSwapStatus(id, status); // ✅ use service
+
+        return ResponseEntity.ok(req);
     }
 }

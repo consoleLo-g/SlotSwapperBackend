@@ -2,6 +2,7 @@ package com.example.SlotSwapperBackend.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.SlotSwapperBackend.Model.Event;
 import com.example.SlotSwapperBackend.Model.SwapRequest;
@@ -96,4 +97,32 @@ public class SwapService {
         req.setStatus(newStatus);
         return swapRepo.save(req);
     }
+
+    @Transactional
+    public void swapEvents(String offeredId, String requestedId, String requesterId) {
+
+        Event offered = eventRepo.findById(offeredId)
+                .orElseThrow(() -> new RuntimeException("Offered event not found"));
+
+        Event requested = eventRepo.findById(requestedId)
+                .orElseThrow(() -> new RuntimeException("Requested event not found"));
+
+        // USER A: requester
+        String userA = requesterId;
+
+        // USER B: owner of requested slot
+        String userB = requested.getUserId();
+
+        // Swap owners
+        offered.setUserId(userB);
+        requested.setUserId(userA);
+
+        // After swapping, disable swappable flag
+        offered.setSwappable(false);
+        requested.setSwappable(false);
+
+        eventRepo.save(offered);
+        eventRepo.save(requested);
+    }
+
 }
